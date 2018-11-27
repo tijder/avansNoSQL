@@ -14,5 +14,14 @@ module.exports = {
           }
           res.status(200).json(species)
         }).catch(next)
-    }
+    },
+
+    create(req, res, next){
+    },
+
+    update(req, res, next){
+    },
+
+    destroy(req, res, next){
+    },
 }
