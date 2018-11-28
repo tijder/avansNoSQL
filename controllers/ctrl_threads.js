@@ -9,7 +9,7 @@ module.exports = {
   },
 
   create(req, res, next) {
-    if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userName'] === undefined) {
+    if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -17,7 +17,7 @@ module.exports = {
       return;
     }
 
-    User.findOne({name: req.body['userName']}).then(user => {
+    User.findOne({_id: req.body['userId']}).then(user => {
       if(!user){
           res.status(422).json({})
           return
@@ -46,21 +46,20 @@ module.exports = {
       return;
     }
 
-    Thread.update({
-      _id: req.body['id']
-    }, {
-      $set: {
-        content: req.body['content']
+    Thread.findOne({_id: req.body['id']}).then(thread => {
+      if(!thread){
+          res.status(422).json({})
+          return
       }
-    }, function (err) {
-      if (err) {
-        res.status(400).json(err);
-      } else {
-        res.status(200).json({
-          message: 'Updated thread: ' + req.body['id']
+      thread.content = req.body['content']
+  
+      thread.save()
+        .then(() => {
+          res.status(200).json(thread);
+        }).catch(err => {
+          res.status(400).json(err);
         });
-      }
-    });
+    })
   },
 
   destroy(req, res, next) {
