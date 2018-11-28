@@ -31,7 +31,7 @@ module.exports = {
   },
 
   update(req, res, next) {
-    if (req.body['id'] === undefined || req.body['title'] === undefined || req.body['content'] === undefined || req.body['user'] === undefined) {
+    if (req.body['id'] === undefined || req.body['content'] === undefined || req.body['user'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).send({
         message: 'Missing or wrong parameters.'
@@ -43,7 +43,6 @@ module.exports = {
       _id: req.body['id']
     }, {
       $set: {
-        title: req.body['title'],
         content: req.body['content']
       }
     }, function (err) {
