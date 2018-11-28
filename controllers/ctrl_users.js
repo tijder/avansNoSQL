@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 module.exports = {
   create(req, res, next) {
-    if (req.query.name === undefined || req.query.password === undefined) {
+    if (req.body['name'] === undefined || req.body['password'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -12,8 +12,8 @@ module.exports = {
       return;
     }
     const user = new User({
-      name: req.query.name,
-      password: req.query.password
+      name: req.body['name'],
+      password: req.body['password']
     });
     user.save()
       .then(() => {
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   update(req, res, next) {
-    if (req.query.name === undefined || req.query.password === undefined || req.query.newpassword === undefined) {
+    if (req.body['name'] === undefined || req.body['password'] === undefined || req.body['newpassword'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -39,12 +39,12 @@ module.exports = {
       return;
     }
 
-    User.findOne({name: req.query.name, password: req.query.password}).then(user => {
+    User.findOne({name: req.body['name'], password: req.body['password']}).then(user => {
       if(!user){
           res.status(401).json({})
           return
       }
-      user.password = req.query.newpassword
+      user.password = req.body['newpassword']
       user.save().then(() => {
         res.status(200).json(user)
       }).catch(err => {
@@ -54,7 +54,7 @@ module.exports = {
   },
 
   destroy(req, res, next) {
-    if (req.query.name === undefined || req.query.password === undefined) {
+    if (req.body['name'] === undefined || req.body['password'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -62,7 +62,7 @@ module.exports = {
       return;
     }
 
-    User.findOne({name: req.query.name, password: req.query.password}).then(user => {
+    User.findOne({name: req.body['name'], password: req.body['password']}).then(user => {
       if(!user){
           res.status(401).json({})
           return
