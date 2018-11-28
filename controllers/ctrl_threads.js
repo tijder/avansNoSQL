@@ -1,5 +1,7 @@
-const Thread = require('../models/thread');
-const User = require('../models/user');
+const Thread = require('../models/thread')
+const User = require('../models/user')
+const {session} = require('../neodb');
+const userQueries = require('../models/user_queries')
 
 module.exports = {
   get(req, res, next) {
@@ -86,7 +88,27 @@ module.exports = {
 
   getSorted(req, res, next) {},
 
-  getByFriendships(req, res, next) {},
+  getByFriendships(req, res, next) {
+    if (req.params.count === undefined || req.query.userId === undefined) {
+      console.log('ERROR 400', req.body);
+      res.status(400).json({
+        message: 'Missing or wrong parameters.'
+      });
+      return;
+    }
+
+    User.findOne({_id: req.query.userId}).then(user => {
+      if(!user){
+          res.status(422).json({})
+          return
+      }
+      userQueries.getFriendsOfFriends(session, user._id, req.params.count).then(result => {
+        Thread.find({user: result}).then(threads => {
+          res.status(200).json(threads);
+        })
+      })
+    })
+  },
 
   createUpvote(req, res, next) {
     if (req.params.threadid === undefined || req.body['userId'] === undefined) {
