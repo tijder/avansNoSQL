@@ -89,7 +89,7 @@ module.exports = {
   getByFriendships(req, res, next) {},
 
   createUpvote(req, res, next) {
-    if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -100,7 +100,7 @@ module.exports = {
     let thread;
 
     Thread.findOne({
-        _id: req.body['threadId']
+        _id: req.params.threadid
       })
       .then((result) => {
         thread = result;
@@ -130,7 +130,7 @@ module.exports = {
             res.status(400).json(err);
           } else {
             res.status(200).json({
-              message: 'Upvoted thread: ' + req.body['threadId']
+              message: 'Upvoted thread: ' + req.params.threadid
             });
           }
         });
@@ -141,7 +141,7 @@ module.exports = {
   },
 
   createDownvote(req, res, next) {
-    if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -152,7 +152,7 @@ module.exports = {
     let thread;
 
     Thread.findOne({
-        _id: req.body['threadId']
+        _id: req.params.threadid
       })
       .then((result) => {
         thread = result;
@@ -182,7 +182,7 @@ module.exports = {
             res.status(400).json(err);
           } else {
             res.status(200).json({
-              message: 'Downvoted thread: ' + req.body['threadId']
+              message: 'Downvoted thread: ' + req.params.threadid
             });
           }
         });
@@ -193,7 +193,7 @@ module.exports = {
   },
 
   destroyUpvote(req, res, next) {
-    if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -204,7 +204,7 @@ module.exports = {
     let thread;
 
     Thread.findOne({
-        _id: req.body['threadId']
+        _id: req.params.threadid
       })
       .then((result) => {
         thread = result;
@@ -226,7 +226,7 @@ module.exports = {
             res.status(400).json(err);
           } else {
             res.status(200).json({
-              message: 'Deleted upvote from thread: ' + req.body['threadId']
+              message: 'Deleted upvote from thread: ' + req.params.threadid
             });
           }
         });
@@ -237,7 +237,7 @@ module.exports = {
   },
 
   destroyDownvote(req, res, next) {
-    if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -248,7 +248,7 @@ module.exports = {
     let thread;
 
     Thread.findOne({
-        _id: req.body['threadId']
+        _id: req.params.threadid
       })
       .then((result) => {
         thread = result;
@@ -270,7 +270,7 @@ module.exports = {
             res.status(400).json(err);
           } else {
             res.status(200).json({
-              message: 'Deleted downvote from thread: ' + req.body['threadId']
+              message: 'Deleted downvote from thread: ' + req.params.threadid
             });
           }
         });
