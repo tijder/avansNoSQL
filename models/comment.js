@@ -1,5 +1,15 @@
 const mongoose = require('mongoose');
+const VoteSchema = require('./vote');
 const Schema = mongoose.Schema;
+
+let schemaOptions = {
+  toObject: {
+    virtuals: true
+  },
+  toJSON: {
+    virtuals: true
+  }
+};
 
 const CommentSchema = new Schema({
   content: {
@@ -11,7 +21,7 @@ const CommentSchema = new Schema({
     ref: 'user'
   },
   votes: [VoteSchema]
-});
+}, schemaOptions);
 
 CommentSchema.virtual('upVotes').get(function () {
   return this.votes.filter(v => v).length;
