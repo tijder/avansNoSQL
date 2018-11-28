@@ -22,7 +22,8 @@ module.exports = {
     res.status(200).json(result)
   },
 
-  destroyFriends(req, res, next) {
+  destroyFriendship(req, res, next) {
+    res.status(200).json(req.body)
     result = userQueries.destroyFriends(session, req.query.user, req.query.friend)
     res.status(200).json(result)
   },
