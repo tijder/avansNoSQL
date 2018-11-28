@@ -8,10 +8,10 @@ router.post('comment/:commentid', commentController.create) // 4b
 
 router.delete(':commentid', commentController.destroy) // 4a
 
-router.post('/:commentid/upvote', commentController.createUpvote) // 4d
-router.delete('/commentid/upvote', commentController.destroyUpvote) // 4d
+router.post(':commentid/upvote', commentController.createUpvote) // 4d
+router.delete(':commentid/upvote', commentController.destroyUpvote) // 4d
 
-router.post('/:commentid/downvote', commentController.createDownvote) // 4e
-router.delete('/commentid/downvote', commentController.destroyDownvote) // 4e
+router.post(':commentid/downvote', commentController.createDownvote) // 4e
+router.delete(':commentid/downvote', commentController.destroyDownvote) // 4e
 
 module.exports = router;
