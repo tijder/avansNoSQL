@@ -9,7 +9,7 @@ module.exports = {
   },
 
   create(req, res, next) {
-    if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userId'] === undefined) {
+    if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -17,18 +17,24 @@ module.exports = {
       return;
     }
 
-    const thread = new Thread({
-      title: req.body['title'],
-      content: req.body['content'],
-      user: req.body['userId']
-    });
-
-    thread.save()
-      .then(() => {
-        res.status(200).json(thread);
-      }).catch(err => {
-        res.status(400).json(err);
+    User.findOne({name: req.body['userName']}).then(user => {
+      if(!user){
+          res.status(422).json({})
+          return
+      }
+      const thread = new Thread({
+        title: req.body['title'],
+        content: req.body['content'],
+        user: user._id
       });
+  
+      thread.save()
+        .then(() => {
+          res.status(200).json(thread);
+        }).catch(err => {
+          res.status(400).json(err);
+        });
+    })
   },
 
   update(req, res, next) {
