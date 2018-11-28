@@ -11,9 +11,9 @@ module.exports = {
   create(req, res, next) {
     if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -22,22 +22,21 @@ module.exports = {
       content: req.body['content'],
       user: req.body['userId']
     });
+
     thread.save()
       .then(() => {
-        res.send(thread);
+        res.status(200).json(thread);
       }).catch(err => {
-        res.send({
-          message: err
-        });
+        res.status(400).json(err);
       });
   },
 
   update(req, res, next) {
     if (req.body['id'] === undefined || req.body['content'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -49,13 +48,11 @@ module.exports = {
       }
     }, function (err) {
       if (err) {
-        res.send({
-          message: err
-        });
+        res.status(400).json(err);
       } else {
-        res.send({
+        res.status(200).json({
           message: 'Updated thread: ' + req.body['id']
-        })
+        });
       }
     });
   },
@@ -63,9 +60,9 @@ module.exports = {
   destroy(req, res, next) {
     if (req.body['id'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -73,11 +70,9 @@ module.exports = {
       _id: req.body['id']
     }, function (err) {
       if (err) {
-        res.send({
-          message: err
-        });
+        res.status(400).json(err);
       } else {
-        res.send({
+        res.status(200).json({
           message: 'Deleted thread: ' + req.body['id']
         });
       }
@@ -91,9 +86,9 @@ module.exports = {
   createUpvote(req, res, next) {
     if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -127,27 +122,25 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });
+            res.status(400).json(err);
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Upvoted thread: ' + req.body['threadId']
-            })
+            });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);          
       });
   },
 
   createDownvote(req, res, next) {
     if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -181,27 +174,25 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });
+            res.status(400).json(err);
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Downvoted thread: ' + req.body['threadId']
-            })
+            });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);          
       });
   },
 
   destroyUpvote(req, res, next) {
     if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -227,27 +218,25 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });
+            res.status(400).json(err);
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Deleted upvote from thread: ' + req.body['threadId']
             });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);          
       });
   },
 
   destroyDownvote(req, res, next) {
     if (req.body['threadId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -273,18 +262,16 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });
+            res.status(400).json(err);
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Deleted downvote from thread: ' + req.body['threadId']
             });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);          
       });
   }
 }

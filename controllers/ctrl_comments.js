@@ -8,9 +8,9 @@ module.exports = {
   create(req, res, next) {
     if (req.body['content'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -19,17 +19,13 @@ module.exports = {
         _id: req.body['threadId']
       }, function (err, thread) {
         if (err) {
-          res.send({
-            message: err
-          });
+          res.status(400).json(err);
         } else {
           User.findOne({
             _id: req.body['userId']
           }, function (err, user) {
             if (err) {
-              res.send({
-                message: err
-              });            
+              res.status(400).json(err);           
             } else {
               let comment = new Comment({
                 content: req.body['content'],
@@ -41,17 +37,14 @@ module.exports = {
                   thread.comments = thread.comments.concat(comment);
                   thread.save(function (err) {
                     if (err) {
-                      res.send({
-                        message: err
-                      });
+                      res.status(400).json(err);           
                     } else {
                       comment.username = user.name;
-                      res.send(JSON.stringify(comment));
+                      res.status(200).json(comment);           
                     }
                   });
                 }).catch(err => {
-                  console.log(err);
-                  done();
+                  res.status(400).json(err);
                 });
             }
           });
@@ -63,39 +56,32 @@ module.exports = {
         _id: req.body['commentId']
       }, function (err, comment) {
         if (err) {
-          res.send({
-            message: err
-          });
+          res.status(400).json(err);           
         } else {
           User.findOne({
             _id: req.body['userId']
           }, function (err, user) {
             if (err) {
-              res.send({
-                message: err
-              });            
+              res.status(400).json(err);        
             } else {
-              let comment = new Comment({
+              let newComment = new Comment({
                 content: req.body['content'],
                 user: req.body['userId']
               });
   
-              comment.save()
+              newComment.save()
                 .then(() => {
                   comment.comments = comment.comments.concat(comment);
                   comment.save(function (err) {
                     if (err) {
-                      res.send({
-                        message: err
-                      });
+                      res.status(400).json(err);
                     } else {
                       comment.username = user.name;
-                      res.send(JSON.stringify(comment));
+                      res.status(200).json(comment);           
                     }
                   });
                 }).catch(err => {
-                  console.log(err);
-                  done();
+                  res.status(400).json(err);
                 });
             }
           });
@@ -107,9 +93,9 @@ module.exports = {
   createUpvote(req, res, next) {
     if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -143,27 +129,25 @@ module.exports = {
 
         comment.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });
+            res.status(400).json(err);
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Upvoted comment: ' + req.body['commentId']
-            })
+            });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);
       });
   },
 
   destroy(req, res, next) {
     if (req.body['id'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -176,13 +160,11 @@ module.exports = {
       }
     }, function (err) {
       if (err) {
-        res.send({
-          message: err
-        });
+        res.status(400).json(err);
       } else {
-        res.send({
+        res.status(200).json({
           message: 'Deleted comment: ' + req.body['id']
-        })
+        });
       }
     });
   },
@@ -190,9 +172,9 @@ module.exports = {
   createDownvote(req, res, next) {
     if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -226,27 +208,25 @@ module.exports = {
 
         comment.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });
+            res.status(400).json(err);
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Upvoted comment: ' + req.body['commentId']
-            })
+            });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);
       });
   },
 
   destroyUpvote(req, res, next) {
     if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
     
@@ -274,27 +254,25 @@ module.exports = {
 
         comment.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });            
+            res.status(400).json(err);         
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Deleted upvote from comment: ' + req.body['commentId']
             });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);
       });
   },
 
   destroyDownvote(req, res, next) {
     if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
     
@@ -322,18 +300,16 @@ module.exports = {
 
         comment.save(function (err) {
           if (err) {
-            res.send({
-              message: err
-            });            
+            res.status(400).json(err);          
           } else {
-            res.send({
+            res.status(200).json({
               message: 'Deleted upvote from comment: ' + req.body['commentId']
             });
           }
         });
       })
       .catch(err => {
-        console.log(err)
+        res.status(400).json(err);
       });
   }
 }
