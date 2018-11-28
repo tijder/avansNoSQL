@@ -9,7 +9,7 @@ module.exports = {
   },
 
   create(req, res, next) {
-    if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['user'] === undefined) {
+    if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).send({
         message: 'Missing or wrong parameters.'
@@ -20,18 +20,20 @@ module.exports = {
     const thread = new Thread({
       title: req.body['title'],
       content: req.body['content'],
-      user: req.body['user']
+      user: req.body['userId']
     });
     thread.save()
       .then(() => {
         res.send(thread);
       }).catch(err => {
-        res.send(err)
+        res.send({
+          message: err
+        });
       });
   },
 
   update(req, res, next) {
-    if (req.body['id'] === undefined || req.body['content'] === undefined || req.body['user'] === undefined) {
+    if (req.body['id'] === undefined || req.body['content'] === undefined) {
       console.log('ERROR 400', req.body);
       res.status(400).send({
         message: 'Missing or wrong parameters.'
@@ -47,9 +49,13 @@ module.exports = {
       }
     }, function (err) {
       if (err) {
-        res.send(err);
+        res.send({
+          message: err
+        });
       } else {
-        res.send('Updated thread: ' + req.body['id'])
+        res.send({
+          message: 'Updated thread: ' + req.body['id']
+        })
       }
     });
   },
@@ -67,9 +73,13 @@ module.exports = {
       _id: req.body['id']
     }, function (err) {
       if (err) {
-        res.send(err);
+        res.send({
+          message: err
+        });
       } else {
-        res.send('Deleted thread: ' + req.body['id']);
+        res.send({
+          message: 'Deleted thread: ' + req.body['id']
+        });
       }
     });
   },
@@ -98,15 +108,15 @@ module.exports = {
       .then(() => User.findOne({
         _id: req.body['userId']
       }))
-      .then((result) => {
+      .then((user) => {
         const voted = thread.votes.filter(function (element) {
-          return element.user.toString() === result._id.toString();
+          return element.user.toString() === user._id.toString();
         });
 
         if (voted.length === 0) {
           thread.votes = thread.votes.concat({
             rated: true,
-            user: result._id
+            user: user._id
           });
         } else if (voted[0].rated === false) {
           let doc = thread.votes.id(voted[0]._id);
@@ -117,9 +127,13 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send(err);
+            res.send({
+              message: err
+            });
           } else {
-            res.send('Upvoted thread: ' + req.body['id'])
+            res.send({
+              message: 'Upvoted thread: ' + req.body['threadId']
+            })
           }
         });
       })
@@ -148,15 +162,15 @@ module.exports = {
       .then(() => User.findOne({
         _id: req.body['userId']
       }))
-      .then((result) => {
+      .then((user) => {
         const voted = thread.votes.filter(function (element) {
-          return element.user.toString() === result._id.toString();
+          return element.user.toString() === user._id.toString();
         });
 
         if (voted.length === 0) {
           thread.votes = thread.votes.concat({
             rated: false,
-            user: result._id
+            user: user._id
           });
         } else if (voted[0].rated === true) {
           let doc = thread.votes.id(voted[0]._id);
@@ -167,9 +181,13 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send(err);
+            res.send({
+              message: err
+            });
           } else {
-            res.send('Downvoted thread: ' + req.body['id'])
+            res.send({
+              message: 'Downvoted thread: ' + req.body['threadId']
+            })
           }
         });
       })
@@ -198,9 +216,9 @@ module.exports = {
       .then(() => User.findOne({
         _id: req.body['userId']
       }))
-      .then((result) => {
+      .then((user) => {
         const voted = thread.votes.filter(function (element) {
-          return element.user.toString() === result._id.toString();
+          return element.user.toString() === user._id.toString();
         });
 
         if (voted.length === 1 && voted[0].rated === true) {
@@ -209,9 +227,13 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send(err);
+            res.send({
+              message: err
+            });
           } else {
-            res.send('Deleted upvote from thread: ' + req.body['id']);
+            res.send({
+              message: 'Deleted upvote from thread: ' + req.body['threadId']
+            });
           }
         });
       })
@@ -240,9 +262,9 @@ module.exports = {
       .then(() => User.findOne({
         _id: req.body['userId']
       }))
-      .then((result) => {
+      .then((user) => {
         const voted = thread.votes.filter(function (element) {
-          return element.user.toString() === result._id.toString();
+          return element.user.toString() === user._id.toString();
         });
 
         if (voted.length === 1 && voted[0].rated === false) {
@@ -251,9 +273,13 @@ module.exports = {
 
         thread.save(function (err) {
           if (err) {
-            res.send(err);
+            res.send({
+              message: err
+            });
           } else {
-            res.send('Deleted downvote from thread: ' + req.body['id']);
+            res.send({
+              message: 'Deleted downvote from thread: ' + req.body['threadId']
+            });
           }
         });
       })

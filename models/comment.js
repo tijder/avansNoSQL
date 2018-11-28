@@ -20,7 +20,12 @@ const CommentSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  votes: [VoteSchema]
+  votes: [VoteSchema],
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'comment'
+  }],
+  username: String
 }, schemaOptions);
 
 CommentSchema.virtual('upVotes').get(function () {
@@ -30,6 +35,12 @@ CommentSchema.virtual('upVotes').get(function () {
 CommentSchema.virtual('downVotes').get(function () {
   return this.votes.filter(v => v == false).length;
 });
+
+CommentSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.user;
+  return obj;
+ }
 
 const Comment = mongoose.model('comment', CommentSchema);
 
