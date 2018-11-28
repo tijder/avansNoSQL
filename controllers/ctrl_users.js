@@ -6,12 +6,11 @@ module.exports = {
   create(req, res, next) {
     if (req.query.name === undefined || req.query.password === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
-
     const user = new User({
       name: req.query.name,
       password: req.query.password
@@ -34,9 +33,9 @@ module.exports = {
   update(req, res, next) {
     if (req.query.name === undefined || req.query.password === undefined || req.query.newpassword === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -57,9 +56,9 @@ module.exports = {
   destroy(req, res, next) {
     if (req.query.name === undefined || req.query.password === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -80,9 +79,9 @@ module.exports = {
   createFriendship(req, res, next) {
     if (req.params.userone === undefined || req.params.usertwo === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
@@ -99,9 +98,9 @@ module.exports = {
   destroyFriendship(req, res, next) {
     if (req.params.userone === undefined || req.params.usertwo === undefined) {
       console.log('ERROR 400', req.body);
-      res.status(400).send({
+      res.status(400).json({
         message: 'Missing or wrong parameters.'
-      }).end();
+      });
       return;
     }
 
