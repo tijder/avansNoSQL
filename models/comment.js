@@ -36,7 +36,6 @@ CommentSchema.virtual('downVotes').get(function () {
   return this.votes.filter(v => v.rated === false).length;
 });
 
-
 CommentSchema.methods.toJSON = function() {
   var obj = this.toObject();
   delete obj.user;

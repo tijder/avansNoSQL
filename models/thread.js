@@ -28,7 +28,8 @@ const ThreadSchema = new Schema({
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'comment'
-  }]
+  }],
+  username: String
 }, schemaOptions);
 
 ThreadSchema.virtual('upVotes').get(function () {
@@ -42,6 +43,12 @@ ThreadSchema.virtual('downVotes').get(function () {
 ThreadSchema.virtual('upVsDownVotes').get(function () {
   return this.votes.filter(v => v.rated).length - this.votes.filter(v => v.rated === false).length;
 });
+
+ThreadSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.user;
+  return obj;
+ }
 
 const Thread = mongoose.model('thread', ThreadSchema);
 
