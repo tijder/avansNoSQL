@@ -6,7 +6,7 @@ const threadController = require('../controllers/ctrl_threads')
 router.get('/', threadController.get) // 3g
 router.post('/', threadController.create) // 3a
 router.put('/', threadController.update) // 3b
-router.delete('/', threadController.destroy) // 3c
+router.delete('/:threadid', threadController.destroy) // 3c
 
 router.get('/sort/asc', threadController.getSortedAsc) // 3g
 router.get('/sort/desc', threadController.getSortedDesc) // 3g
