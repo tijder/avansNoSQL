@@ -4,8 +4,8 @@ const User = require('../models/user')
 
 module.exports = {
   get(req, res, next) {
-    Thread.find({}, function (err, threads) {
-      res.send(threads)
+    Comment.find({}, function (err, comments) {
+      res.send(comments)
     })
   },
 
@@ -37,7 +37,8 @@ module.exports = {
             } else {
               let comment = new Comment({
                 content: req.body['content'],
-                user: user.id
+                user: user.id,
+                username: req.body['userName']
               })
   
               comment.save()
@@ -103,7 +104,7 @@ module.exports = {
   },
 
   createUpvote(req, res, next) {
-    if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -114,7 +115,7 @@ module.exports = {
     let comment
 
     Comment.findOne({
-        _id: req.body['commentId']
+        _id: req.params.commentid
       })
       .then((result) => {
         comment = result
@@ -144,7 +145,7 @@ module.exports = {
             res.status(400).json(err)
           } else {
             res.status(200).json({
-              message: 'Upvoted comment: ' + req.body['commentId']
+              message: 'Upvoted comment: ' + req.params.commentid
             })
           }
         })
@@ -155,7 +156,7 @@ module.exports = {
   },
 
   destroy(req, res, next) {
-    if (req.body['id'] === undefined) {
+    if (req.params.commentid === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -164,7 +165,7 @@ module.exports = {
     }
 
     Comment.update({
-      _id: req.body['id']
+      _id: req.params.commentid
     }, {
       $set: {
         content: '[Deleted]',
@@ -175,14 +176,14 @@ module.exports = {
         res.status(400).json(err)
       } else {
         res.status(200).json({
-          message: 'Deleted comment: ' + req.body['id']
+          message: 'Deleted comment: ' + req.params.commentid
         })
       }
     })
   },
 
   createDownvote(req, res, next) {
-    if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -193,7 +194,7 @@ module.exports = {
     let comment
 
     Comment.findOne({
-        _id: req.body['commentId']
+        _id: req.params.commentid
       })
       .then((result) => {
         comment = result
@@ -223,7 +224,7 @@ module.exports = {
             res.status(400).json(err)
           } else {
             res.status(200).json({
-              message: 'Upvoted comment: ' + req.body['commentId']
+              message: 'Upvoted comment: ' + req.params.commentid
             })
           }
         })
@@ -234,7 +235,7 @@ module.exports = {
   },
 
   destroyUpvote(req, res, next) {
-    if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -245,7 +246,7 @@ module.exports = {
     let comment
 
     Comment.findOne({
-        _id: req.body['commentId']
+        _id: req.params.commentid
       })
       .then((result) => {
         comment = result
@@ -269,7 +270,7 @@ module.exports = {
             res.status(400).json(err)         
           } else {
             res.status(200).json({
-              message: 'Deleted upvote from comment: ' + req.body['commentId']
+              message: 'Deleted upvote from comment: ' + req.params.commentid
             })
           }
         })
@@ -280,7 +281,7 @@ module.exports = {
   },
 
   destroyDownvote(req, res, next) {
-    if (req.body['commentId'] === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -291,7 +292,7 @@ module.exports = {
     let comment
 
     Comment.findOne({
-        _id: req.body['commentId']
+        _id: req.params.commentid
       })
       .then((result) => {
         comment = result
@@ -315,7 +316,7 @@ module.exports = {
             res.status(400).json(err)          
           } else {
             res.status(200).json({
-              message: 'Deleted upvote from comment: ' + req.body['commentId']
+              message: 'Deleted upvote from comment: ' + req.params.commentid
             })
           }
         })
