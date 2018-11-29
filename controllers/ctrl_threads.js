@@ -31,6 +31,35 @@ module.exports = {
     })
   },
 
+  getById(req, res, next) {
+    if (req.params.threadid === undefined) {
+      console.log('ERROR 400', req.body)
+      res.status(400).json({
+        message: 'Missing or wrong parameters.'
+      })
+      return
+    }
+    Thread.findOne({_id: req.params.threadid}).deepPopulate([
+      'user',
+      'comments.user',
+      'comments.comments.user',
+      'comments.comments.comments.user',
+      'comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.user'
+    ]).exec(function (err, thread) {
+      if(!thread){
+        res.status(422).json({})
+        return
+      }
+      res.send(thread)
+    })
+  },
+
   create(req, res, next) {
     if (req.body['title'] === undefined || req.body['content'] === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
@@ -131,7 +160,7 @@ module.exports = {
   },
 
   createUpvote(req, res, next) {
-    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -148,9 +177,13 @@ module.exports = {
         thread = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         const voted = thread.votes.filter(function (element) {
           return element.user.toString() === user._id.toString()
         })
@@ -183,7 +216,7 @@ module.exports = {
   },
 
   createDownvote(req, res, next) {
-    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -200,9 +233,13 @@ module.exports = {
         thread = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         const voted = thread.votes.filter(function (element) {
           return element.user.toString() === user._id.toString()
         })
@@ -235,7 +272,7 @@ module.exports = {
   },
 
   destroyUpvote(req, res, next) {
-    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -252,9 +289,13 @@ module.exports = {
         thread = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         const voted = thread.votes.filter(function (element) {
           return element.user.toString() === user._id.toString()
         })
@@ -279,7 +320,7 @@ module.exports = {
   },
 
   destroyDownvote(req, res, next) {
-    if (req.params.threadid === undefined || req.body['userId'] === undefined) {
+    if (req.params.threadid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -296,9 +337,13 @@ module.exports = {
         thread = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         const voted = thread.votes.filter(function (element) {
           return element.user.toString() === user._id.toString()
         })

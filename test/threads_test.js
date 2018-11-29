@@ -6,9 +6,10 @@ const expect = chai.expect()
 
 chai.use(chaiHttp)
 describe('Threads API interface', () => {
-    var threadTitle = "ThreadTest" + Math.floor((Math.random() * 1000000000000) + 1)
-    var username = "ThreadTest" + Math.floor((Math.random() * 1000000000000) + 1)
-    it('should POST /threads incorrect if params missing', done => {
+      var threadTitle = "ThreadTest" + Math.floor((Math.random() * 1000000000000) + 1)
+      var username = "ThreadTest" + Math.floor((Math.random() * 1000000000000) + 1)
+      var threadid
+      it('should POST /threads incorrect if params missing', done => {
         chai.request(server)
             .post('/threads')
             .end((err, res) => {
@@ -34,6 +35,7 @@ describe('Threads API interface', () => {
                     res.body.content.should.equal('test thread content')
                     res.body.upVotes.should.equal(0)
                     res.body.downVotes.should.equal(0)
+                    threadid = res.body.id
                     done()
                 })
         })
@@ -50,5 +52,34 @@ describe('Threads API interface', () => {
                 res.should.have.status(422)
                 done()
             })
-    })
+        })
+        it('should GET /threads correct', done => {
+            chai.request(server)
+                .get('/threads')
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    res.body.should.be.a('array')
+                    done()
+                })
+        })
+        it('should GET /threads/:threadid correct', done => {
+            chai.request(server)
+                .get('/threads/' + threadid)
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    res.body.title.should.equal(threadTitle)
+                    res.body.content.should.equal('test thread content')
+                    res.body.upVotes.should.equal(0)
+                    res.body.downVotes.should.equal(0)
+                    done()
+                })
+        })
+        it('should GET /threads/:threadid incorrect if thread doesnt exist', done => {
+            chai.request(server)
+                .get('/threads/dontexist')
+                .end((err, res) => {
+                    res.should.have.status(422)
+                    done()
+                })
+        })
 })

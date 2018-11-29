@@ -1,5 +1,6 @@
 const mongoose = require('../mongodb');
 const VoteSchema = require('./vote');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 const Schema = mongoose.Schema;
 
 let schemaOptions = {
@@ -42,6 +43,7 @@ CommentSchema.methods.toJSON = function() {
   return obj;
  }
 
+CommentSchema.plugin(deepPopulate, {});
 const Comment = mongoose.model('comment', CommentSchema);
 
 module.exports = Comment;
