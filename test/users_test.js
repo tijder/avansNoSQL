@@ -69,4 +69,31 @@ describe('Users API interface', () => {
             done();
           });
       });
+      it('should DELETE /users incorrect if params missing', done => {
+        chai.request(server)
+          .delete('/users')
+          .end((err, res) => {
+            res.should.have.status(400);
+            done();
+          });
+      });
+      it('should DELETE /users correct', done => {
+        chai.request(server)
+          .delete('/users')
+          .send({name:username,password:password + 'new'})
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.active.should.equal(false)
+            done();
+          });
+      });
+      it('should DELETE /users incorrect if password is incorrect', done => {
+        chai.request(server)
+          .delete('/users')
+          .send({name:username,password:'incorrect',newpassword:password + 'new'})
+          .end((err, res) => {
+            res.should.have.status(401);
+            done();
+          });
+      });
 })
