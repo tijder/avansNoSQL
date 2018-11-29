@@ -69,7 +69,7 @@ module.exports = {
           res.status(422).json({})
         } else {
           User.findOne({
-            _id: req.body['userName']
+            name: req.body['userName']
           }, function (err, user) {
             if (err) {
               res.status(400).json(err)        
