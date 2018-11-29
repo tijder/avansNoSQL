@@ -46,7 +46,8 @@ module.exports = {
       const thread = new Thread({
         title: req.body['title'],
         content: req.body['content'],
-        user: user._id
+        user: user._id,
+        username: req.body['userName']
       })
   
       thread.save()
