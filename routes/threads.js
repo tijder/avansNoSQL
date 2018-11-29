@@ -18,9 +18,9 @@ router.get('/:threadid', threadController.get) // 3h
 router.get('/friendships/:count', threadController.getByFriendships) // 3f
 
 router.post('/:threadid/upvote', threadController.createUpvote) // 3d
-router.delete('/threadid/upvote', threadController.destroyUpvote) // 3d
+router.delete('/:threadid/upvote', threadController.destroyUpvote) // 3d
 
 router.post('/:threadid/downvote', threadController.createDownvote) // 3e
-router.delete('/threadid/downvote', threadController.destroyDownvote) // 3e
+router.delete('/:threadid/downvote', threadController.destroyDownvote) // 3e
 
 module.exports = router;
