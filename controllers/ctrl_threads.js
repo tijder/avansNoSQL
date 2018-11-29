@@ -39,7 +39,20 @@ module.exports = {
       })
       return
     }
-    Thread.findOne({_id: req.params.threadid}).populate(['comments', 'user']).exec(function (err, thread) {
+    Thread.findOne({_id: req.params.threadid}).deepPopulate([
+      'user',
+      'comments.user',
+      'comments.comments.user',
+      'comments.comments.comments.user',
+      'comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.comments.comments.user',
+      'comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.user'
+    ]).exec(function (err, thread) {
+    // Thread.findOne({_id: req.params.threadid}).deepPopulate(['comments.user', 'comments.comments', 'user']).exec(function (err, thread) {
       res.send(thread)
     })
   },

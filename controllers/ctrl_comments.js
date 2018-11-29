@@ -85,7 +85,7 @@ module.exports = {
               newComment.save()
                 .then(() => {
                   comment.comments = comment.comments.concat(newComment)
-                  newComment.save(function (err) {
+                  comment.save(function (err) {
                     if (err) {
                       res.status(400).json(err)
                     } else {

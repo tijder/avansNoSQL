@@ -1,5 +1,6 @@
 const mongoose = require('../mongodb');
 const VoteSchema = require('./vote');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 const Schema = mongoose.Schema;
 
 let schemaOptions = {
@@ -50,6 +51,7 @@ ThreadSchema.methods.toJSON = function() {
   return obj;
  }
 
+ThreadSchema.plugin(deepPopulate, {});
 const Thread = mongoose.model('thread', ThreadSchema);
 
 module.exports = Thread;
