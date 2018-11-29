@@ -17,7 +17,6 @@ module.exports = {
     });
     user.save()
       .then(() => {
-        console.log(user)
         result = userQueries.createUser(session, user._id)
         res.status(200).json(user)
       }).catch(err => {
