@@ -52,6 +52,10 @@ module.exports = {
       'comments.comments.comments.comments.comments.comments.comments.comments.comments.user',
       'comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.comments.user'
     ]).exec(function (err, thread) {
+      if(!thread){
+        res.status(422).json({})
+        return
+      }
       res.send(thread)
     })
   },
