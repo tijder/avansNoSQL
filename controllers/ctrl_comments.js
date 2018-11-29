@@ -83,13 +83,13 @@ module.exports = {
   
               newComment.save()
                 .then(() => {
-                  comment.comments = comment.comments.concat(comment)
-                  comment.save(function (err) {
+                  comment.comments = comment.comments.concat(newComment)
+                  newComment.save(function (err) {
                     if (err) {
                       res.status(400).json(err)
                     } else {
-                      comment.username = user.name
-                      res.status(200).json(comment)           
+                      newComment.username = user.name
+                      res.status(200).json(newComment)           
                     }
                   })
                 }).catch(err => {
