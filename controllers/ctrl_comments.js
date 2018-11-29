@@ -224,7 +224,7 @@ module.exports = {
             res.status(400).json(err)
           } else {
             res.status(200).json({
-              message: 'Upvoted comment: ' + req.params.commentid
+              message: 'Downvoted comment: ' + req.params.commentid
             })
           }
         })
@@ -316,7 +316,7 @@ module.exports = {
             res.status(400).json(err)          
           } else {
             res.status(200).json({
-              message: 'Deleted upvote from comment: ' + req.params.commentid
+              message: 'Deleted downvote from comment: ' + req.params.commentid
             })
           }
         })
