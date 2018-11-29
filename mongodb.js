@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var url = "mongodb://localhost:27017/mydb";
+var url = "mongodb://admin:50LVR5DgZwwumTUZ@ds016148.mlab.com:16148/studdit";
 
 mongoose.Promise = global.Promise;
 
