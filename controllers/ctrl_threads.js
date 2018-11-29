@@ -1,4 +1,5 @@
 const Thread = require('../models/thread')
+const Comment = require('../models/comment')
 const User = require('../models/user')
 const {session} = require('../neodb')
 const userQueries = require('../models/user_queries')
@@ -83,7 +84,7 @@ module.exports = {
   },
 
   destroy(req, res, next) {
-    if (req.body['id'] === undefined) {
+    if (req.params.threadid === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -91,16 +92,16 @@ module.exports = {
       return
     }
 
-    Thread.remove({
-      _id: req.body['id']
-    }, function (err) {
-      if (err) {
-        res.status(400).json(err)
-      } else {
-        res.status(200).json({
-          message: 'Deleted thread: ' + req.body['id']
-        })
+    Thread.findOne({_id: req.params.threadid}).populate('comments').then(thread => {
+      if(!thread){
+          res.status(422).json({})
+          return
       }
+      for (var i = 0; i < thread.comments.length; i++) {
+        Comment.remove({_id: thread.comments[i].id}).exec()
+      }
+      Thread.remove({_id: thread.id}).exec()
+      res.status(200).json({})
     })
   },
 
