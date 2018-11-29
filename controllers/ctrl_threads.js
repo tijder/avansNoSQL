@@ -12,13 +12,15 @@ module.exports = {
   },
 
   getSortedAsc(req, res, next) {
-    Thread.find({}).populate('user').sort('-upVotes').exec(function (err, threads) {
+    Thread.find({}).populate('user').exec(function (err, threads) {
+      threads.sort((a,b) => (a.upVotes < b.upVotes) ? 1 : ((b.upVotes < a.upVotes) ? -1 : 0))
       res.send(threads)
     })
   },
 
   getSortedDesc(req, res, next) {
-    Thread.find({}).populate('user').sort('-upVsDownVotes').exec(function (err, threads) {
+    Thread.find({}).populate('user').exec(function (err, threads) {
+      threads.sort((a,b) => (a.upVsDownVotes < b.upVsDownVotes) ? 1 : ((b.upVsDownVotes < a.upVsDownVotes) ? -1 : 0))
       res.send(threads)
     })
   },
