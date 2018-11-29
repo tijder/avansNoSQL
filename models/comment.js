@@ -29,12 +29,13 @@ const CommentSchema = new Schema({
 }, schemaOptions);
 
 CommentSchema.virtual('upVotes').get(function () {
-  return this.votes.filter(v => v).length;
+  return this.votes.filter(v => v.rated).length;
 });
 
 CommentSchema.virtual('downVotes').get(function () {
-  return this.votes.filter(v => v == false).length;
+  return this.votes.filter(v => v.rated === false).length;
 });
+
 
 CommentSchema.methods.toJSON = function() {
   var obj = this.toObject();

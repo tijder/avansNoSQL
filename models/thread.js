@@ -32,15 +32,15 @@ const ThreadSchema = new Schema({
 }, schemaOptions);
 
 ThreadSchema.virtual('upVotes').get(function () {
-  return this.votes.filter(v => v).length;
+  return this.votes.filter(v => v.rated).length;
 });
 
 ThreadSchema.virtual('downVotes').get(function () {
-  return this.votes.filter(v => v == false).length;
+  return this.votes.filter(v => v.rated === false).length;
 });
 
 ThreadSchema.virtual('upVsDownVotes').get(function () {
-  return this.votes.filter(v => v).length - this.votes.filter(v => v == false).length;
+  return this.votes.filter(v => v.rated).length - this.votes.filter(v => v.rated === false).length;
 });
 
 const Thread = mongoose.model('thread', ThreadSchema);
