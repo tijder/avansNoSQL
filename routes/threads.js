@@ -8,9 +8,9 @@ router.post('/', threadController.create) // 3a
 router.put('/', threadController.update) // 3b
 router.delete('/', threadController.destroy) // 3c
 
-router.get('/sort/asc', threadController.getSorted) // 3g
-router.get('/sort/desc', threadController.getSorted) // 3g
-router.get('/sort/comments', threadController.get) // 3g
+router.get('/sort/asc', threadController.getSortedAsc) // 3g
+router.get('/sort/desc', threadController.getSortedDesc) // 3g
+router.get('/sort/comments', threadController.getByComments) // 3g
 
 
 router.get('/:threadid', threadController.get) // 3h

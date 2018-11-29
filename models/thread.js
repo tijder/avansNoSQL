@@ -39,6 +39,10 @@ ThreadSchema.virtual('downVotes').get(function () {
   return this.votes.filter(v => v == false).length;
 });
 
+ThreadSchema.virtual('upVsDownVotes').get(function () {
+  return this.votes.filter(v => v).length - this.votes.filter(v => v == false).length;
+});
+
 const Thread = mongoose.model('thread', ThreadSchema);
 
 module.exports = Thread;
