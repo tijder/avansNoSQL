@@ -13,7 +13,7 @@ router.get('/sort/desc', threadController.getSortedDesc) // 3g
 router.get('/sort/comments', threadController.getByComments) // 3g
 
 
-router.get('/:threadid', threadController.get) // 3h
+router.get('/:threadid', threadController.getById) // 3h
 
 router.get('/friendships/:count', threadController.getByFriendships) // 3f
 

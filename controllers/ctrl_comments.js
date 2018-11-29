@@ -85,7 +85,7 @@ module.exports = {
               newComment.save()
                 .then(() => {
                   comment.comments = comment.comments.concat(newComment)
-                  newComment.save(function (err) {
+                  comment.save(function (err) {
                     if (err) {
                       res.status(400).json(err)
                     } else {
@@ -104,7 +104,7 @@ module.exports = {
   },
 
   createUpvote(req, res, next) {
-    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -121,9 +121,13 @@ module.exports = {
         comment = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         const voted = comment.votes.filter(function (element) {
           return element.user.toString() === user._id.toString()
         })
@@ -183,7 +187,7 @@ module.exports = {
   },
 
   createDownvote(req, res, next) {
-    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -200,9 +204,13 @@ module.exports = {
         comment = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         const voted = comment.votes.filter(function (element) {
           return element.user.toString() === user._id.toString()
         })
@@ -235,7 +243,7 @@ module.exports = {
   },
 
   destroyUpvote(req, res, next) {
-    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -252,9 +260,13 @@ module.exports = {
         comment = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         comment.username = user.name
 
         const voted = comment.votes.filter(function (element) {
@@ -281,7 +293,7 @@ module.exports = {
   },
 
   destroyDownvote(req, res, next) {
-    if (req.params.commentid === undefined || req.body['userId'] === undefined) {
+    if (req.params.commentid === undefined || req.body['userName'] === undefined) {
       console.log('ERROR 400', req.body)
       res.status(400).json({
         message: 'Missing or wrong parameters.'
@@ -298,9 +310,13 @@ module.exports = {
         comment = result
       })
       .then(() => User.findOne({
-        _id: req.body['userId']
+        name: req.body['userName']
       }))
       .then((user) => {
+        if(!user){
+          res.status(422).json({})
+          return
+        }
         comment.username = user.name
 
         const voted = comment.votes.filter(function (element) {
